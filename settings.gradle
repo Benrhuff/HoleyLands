@@ -1,0 +1,3 @@
+rootProject.name = 'HoleyLands'
+kotlinVersion = '0.14.451'
+

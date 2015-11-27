@@ -1,0 +1,51 @@
+buildscript {
+    ext.kotlin_version = '1.0.0-beta-2423'
+    repositories {
+        jcenter()
+        maven {
+            url 'http://oss.sonatype.org/content/repositories/snapshots'
+        }
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'kotlin'
+// Kotlin's stdlib and such need to be shadowed in.
+apply plugin: 'com.github.johnrengelman.shadow'
+
+repositories {
+    jcenter()
+
+    maven {
+        name 'Sponge maven repo'
+        url 'http://repo.spongepowered.org/maven'
+    }
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-runtime:$kotlin_version"
+    compile 'org.spongepowered:spongeapi:2.1-SNAPSHOT'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}
+
+sourceSets {
+    // Kotlin finds code from the java source directory, so rename it to kotlin
+    main.java.srcDirs += 'src/main/kotlin'
+}
+
+shadowJar {
+    dependencies {
+        include dependency("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
+        include dependency("org.jetbrains.kotlin:kotlin-reflect:$kotlin_version")
+        include dependency("org.jetbrains.kotlin:kotlin-runtime:$kotlin_version")
+    }
+}
